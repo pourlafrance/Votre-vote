@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Et vous, vous auriez voté quoi ? — Votes à l'Assemblée nationale</title>
+  <meta name="description" content="Confrontez vos choix aux votes des groupes politiques à l'Assemblée nationale. Aucune donnée n'est collectée." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip" href="#liste">Aller à la liste des textes</a>
+
+  <header class="site">
+    <div class="wrap">
+      <h1>Et vous, vous auriez voté&nbsp;quoi&nbsp;?</h1>
+      <p class="lede">
+        Pour chaque texte voté à l'Assemblée nationale, donnez votre avis —
+        <strong>Pour</strong>, <strong>Contre</strong> ou <strong>Abstention</strong> —
+        puis découvrez ce qu'ont voté les groupes politiques.
+      </p>
+      <p class="principe">
+        🔒 <strong>Aucune donnée n'est collectée.</strong> Vos réponses restent sur votre appareil et ne sont envoyées nulle part.
+        L'objectif est seulement de confronter vos idées aux choix des partis, sur des faits publics et sourcés.
+      </p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="kpi" class="kpi" aria-label="Participation des groupes">
+      <h2>Présence aux votes, par groupe</h2>
+      <p class="sub">Part des votes solennels auxquels les membres du groupe ont effectivement pris part (moyenne).</p>
+      <div id="kpi-list" class="kpi-list"></div>
+    </section>
+
+    <section id="filtres" class="filtres" aria-label="Filtrer par thématique">
+      <h2 class="sr-only">Thématiques</h2>
+      <div id="themes" class="themes"></div>
+    </section>
+
+    <section id="liste" aria-live="polite">
+      <div id="textes" class="textes"></div>
+    </section>
+  </main>
+
+  <footer class="site-foot">
+    <div class="wrap">
+      <p>
+        Sources : <a href="https://data.assemblee-nationale.fr/" target="_blank" rel="noopener">open data de l'Assemblée nationale</a> (scrutins publics)
+        et <a href="https://www.data.gouv.fr/fr/datasets/deputes-actifs-de-lassemblee-nationale-informations-et-statistiques/" target="_blank" rel="noopener">Datan</a> (groupes).
+        Licence Ouverte / Etalab.
+      </p>
+      <p class="maj">Données mises à jour automatiquement · <span id="maj"></span> · Législature en cours. Classement par thématique : automatique (par mots-clés).</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
