@@ -1,13 +1,14 @@
-// Aucune donnée n'est collectée : les choix vivent en mémoire, rien n'est envoyé
-// ni stocké durablement. Tout est recalculé côté navigateur.
+// Aucune donnée n'est collectée : la réponse vit en mémoire pour la question
+// affichée uniquement, rien n'est envoyé ni conservé. À chaque changement de
+// question ou de filtre, on repart d'un état vierge (aucune réponse sélectionnée).
 
 const LABELS = { pour: 'Pour', contre: 'Contre', abstention: 'Abstention' };
-const choix = {};               // id du texte -> 'pour' | 'contre' | 'abstention'
 let DATA = null;
 let theme = 'Tous';
 let annee = 'Toutes';
-let liste = [];                 // questions filtrées (récentes d'abord)
+let liste = [];       // questions filtrées (récentes d'abord)
 let idx = 0;
+let reponse = null;   // réponse de la SEULE question affichée (réinitialisée à chaque navigation)
 
 const $ = (s, el = document) => el.querySelector(s);
 const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
@@ -25,6 +26,8 @@ async function init() {
     return;
   }
   $('#maj').textContent = DATA.maj || '';
+  $('#prev').onclick = () => { if (idx > 0) { reponse = null; idx--; render(); scrollTop(); } };
+  $('#next').onclick = () => { if (idx < liste.length - 1) { reponse = null; idx++; render(); scrollTop(); } };
   rebuild();
 }
 
@@ -34,12 +37,12 @@ function rebuild() {
     .filter(t => annee === 'Toutes' || anneeDe(t) === annee)
     .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
   idx = 0;
+  reponse = null;          // changement de filtre => rien de sélectionné
   renderFiltres();
   render();
 }
 
 function renderFiltres() {
-  // Thèmes
   const tbox = $('#themes'); tbox.innerHTML = '';
   ['Tous', ...(DATA.themes || [])].forEach(t => {
     const b = el('button', 'chip', esc(t)); b.type = 'button';
@@ -47,7 +50,6 @@ function renderFiltres() {
     b.onclick = () => { theme = t; rebuild(); };
     tbox.append(b);
   });
-  // Années (distinctes, décroissantes)
   const abox = $('#annees'); abox.innerHTML = '';
   const annees = [...new Set((DATA.textes || []).map(anneeDe).filter(Boolean))].sort().reverse();
   ['Toutes', ...annees].forEach(a => {
@@ -59,15 +61,20 @@ function renderFiltres() {
 }
 
 function render() {
-  const q = $('#question'); const nav = $('#nav');
-  q.innerHTML = ''; nav.innerHTML = '';
-  if (!liste.length) { q.innerHTML = '<p class="empty">Aucun texte ne correspond à ces filtres.</p>'; return; }
+  const q = $('#question'); q.innerHTML = '';
+  const prev = $('#prev'), next = $('#next');
+  if (!liste.length) {
+    $('#progress').textContent = '';
+    q.innerHTML = '<p class="empty">Aucun texte ne correspond à ces filtres.</p>';
+    prev.classList.add('hidden'); next.classList.add('hidden');
+    return;
+  }
   if (idx >= liste.length) idx = liste.length - 1;
-
-  const t = liste[idx];
-  q.append(el('p', 'progress', `Question ${idx + 1} / ${liste.length}`));
-  q.append(carteTexte(t));
-  renderNav();
+  prev.classList.remove('hidden'); next.classList.remove('hidden');
+  prev.disabled = idx === 0;
+  next.disabled = idx === liste.length - 1;
+  $('#progress').textContent = `Question ${idx + 1} / ${liste.length}`;
+  q.append(carteTexte(liste[idx]));
 }
 
 function carteTexte(t) {
@@ -82,27 +89,19 @@ function carteTexte(t) {
   c.append(meta);
 
   c.append(el('h2', 't-titre', esc(t.titre || t.titreOfficiel || '')));
-
-  if (t.contexte) {
-    c.append(el('div', 't-contexte', '<span class="ctx-label">De quoi s\'agit-il ?</span>' + esc(t.contexte)));
-  }
+  if (t.contexte) c.append(el('div', 't-contexte', '<span class="ctx-label">De quoi s\'agit-il ?</span>' + esc(t.contexte)));
 
   const choixBox = el('div', 'choix');
   ['pour', 'contre', 'abstention'].forEach(v => {
     const b = el('button', null, LABELS[v]); b.type = 'button'; b.dataset.v = v;
-    b.onclick = () => { choix[t.id] = v; render(); };
+    b.classList.toggle('sel', reponse === v);
+    b.onclick = () => { reponse = v; render(); };
     choixBox.append(b);
   });
   c.append(choixBox);
 
-  const mon = choix[t.id];
-  c.querySelectorAll('.choix button').forEach(b => b.classList.toggle('sel', b.dataset.v === mon));
-
-  if (!mon) {
-    c.append(el('p', 'hint', 'Choisissez pour voir comment ont voté les groupes.'));
-  } else {
-    c.append(reveal(t, mon));
-  }
+  if (!reponse) c.append(el('p', 'hint', 'Choisissez pour voir comment ont voté les groupes.'));
+  else c.append(reveal(t, reponse));
   return c;
 }
 
@@ -131,26 +130,8 @@ function reveal(t, mon) {
   return r;
 }
 
-function renderNav() {
-  const nav = $('#nav'); nav.innerHTML = '';
-  const t = liste[idx];
-  const prev = el('button', null, '← Précédent'); prev.type = 'button';
-  prev.disabled = idx === 0;
-  prev.onclick = () => { if (idx > 0) { idx--; render(); scrollTop(); } };
-  nav.append(prev);
-
-  // « Suivant » apparaît une fois qu'on a répondu (sinon on invite à choisir).
-  if (choix[t.id] && idx < liste.length - 1) {
-    const next = el('button', 'primary', 'Question suivante →'); next.type = 'button';
-    next.onclick = () => { idx++; render(); scrollTop(); };
-    nav.append(next);
-  } else if (choix[t.id] && idx === liste.length - 1) {
-    nav.append(el('span', 'hint', 'Vous avez parcouru tous les textes de cette sélection.'));
-  }
-}
-
 function scrollTop() {
-  const y = document.querySelector('#quiz').getBoundingClientRect().top + window.scrollY - 12;
+  const y = $('#quiz').getBoundingClientRect().top + window.scrollY - 12;
   window.scrollTo({ top: y, behavior: 'smooth' });
 }
 
