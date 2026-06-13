@@ -47,6 +47,32 @@ const THEMES = [
 ]
 const themeDe = (txt) => (THEMES.find(([, re]) => re.test(txt)) || ['Autre'])[0]
 
+// Nettoie l'intitulé officiel en titre lisible.
+function titrePropre(objet) {
+  let s = objet.replace(/^l['’]ensemble\s+(du |de la |des |de l['’]|d['’])?/i, '').trim()
+  s = s.replace(/\s*\((première|deuxième|nouvelle|nouvelle lecture|lecture définitive)[^)]*\)\s*$/i, '').trim()
+  return s ? s.charAt(0).toUpperCase() + s.slice(1) : objet
+}
+const typeDe = (o) => /proposition de loi/i.test(o) ? 'Proposition de loi'
+  : /projet de loi/i.test(o) ? 'Projet de loi'
+  : /proposition de r[ée]solution/i.test(o) ? 'Proposition de résolution'
+  : /motion/i.test(o) ? 'Motion' : 'Texte'
+const lectureDe = (o) => (o.match(/(première lecture|deuxième lecture|nouvelle lecture|lecture définitive)/i) || [''])[0].toLowerCase()
+
+// Contexte : surcouche manuelle (contextes.json) prioritaire ; sinon phrase factuelle.
+let CONTEXTES = {}
+try {
+  const p = resolve(__dirname, '../contextes.json')
+  if (existsSync(p)) CONTEXTES = JSON.parse(readFileSync(p, 'utf8'))
+} catch { /* ignore */ }
+function contexteDe(numero, type, lecture, theme) {
+  const m = CONTEXTES[String(numero)]
+  if (m && typeof m === 'string' && m.trim()) return m.trim()
+  const bits = [type]
+  if (lecture) bits.push(lecture)
+  return `${bits.join(', ')}. Vote sur l'ensemble du texte. Thématique : ${theme}.`
+}
+
 // ---- CSV (Datan, séparateur point-virgule, guillemets) ----
 function parseCSV(text) {
   const rows = []; let f = '', row = [], q = false
@@ -114,7 +140,6 @@ function main() {
 
   const fichiers = walkJSON(dir).filter(f => /scrutin/i.test(f))
   const textes = []
-  const kpi = {}  // groupe -> { exprimes, effectif, votes }
 
   for (const f of fichiers) {
     let s
@@ -139,20 +164,22 @@ function main() {
     }
     if (!Object.keys(parGroupe).length) continue
 
-    // position majoritaire du groupe + KPI participation
+    // position majoritaire du groupe
     const groupes = {}
     for (const [nom, c] of Object.entries(parGroupe)) {
-      const expr = c.pour + c.contre + c.abstention
-      const eff = expr + c.nonVotant
       const position = c.pour >= c.contre && c.pour >= c.abstention ? 'pour'
                      : c.contre >= c.abstention ? 'contre' : 'abstention'
-      groupes[nom] = { ...c, position }
-      const a = (kpi[nom] ||= { exprimes: 0, effectif: 0, votes: 0 })
-      a.exprimes += expr; a.effectif += eff; if (eff) a.votes++
+      groupes[nom] = { pour: c.pour, contre: c.contre, abstention: c.abstention, nonVotant: c.nonVotant, position }
     }
 
+    const theme = themeDe(objet)
+    const type = typeDe(objet)
+    const lecture = lectureDe(objet)
     textes.push({
-      id: numero || f, date, titre: objet, theme: themeDe(objet),
+      id: numero || f, date,
+      titre: titrePropre(objet), titreOfficiel: objet,
+      type, lecture, theme,
+      contexte: contexteDe(numero, type, lecture, theme),
       sort: adopte ? 'adopté' : (sort ? 'rejeté' : ''),
       global, groupes,
       lienTexte: numero ? `https://www.assemblee-nationale.fr/dyn/17/scrutins/${numero}` : 'https://www.assemblee-nationale.fr/dyn/17/scrutins'
@@ -162,15 +189,10 @@ function main() {
   if (!textes.length) { console.warn('⚠️ aucun texte retenu, on n\'écrase pas'); return }
   textes.sort((a, b) => (b.date || '').localeCompare(a.date || ''))
 
-  const groupes = Object.entries(kpi)
-    .map(([nom, a]) => ({ nom, participation: a.effectif ? Math.round(a.exprimes / a.effectif * 100) : null, votes: a.votes }))
-    .filter(g => g.votes >= 3)
-    .sort((a, b) => b.votes - a.votes)
-
   const themes = [...new Set(textes.map(t => t.theme))]
 
-  writeFileSync(OUT, JSON.stringify({ maj: AUJOURDHUI, legislature: 17, nbTextes: textes.length, groupes, themes, textes }), 'utf8')
-  console.log(`✓ ${textes.length} textes, ${groupes.length} groupes. → data.json`)
+  writeFileSync(OUT, JSON.stringify({ maj: AUJOURDHUI, legislature: 17, nbTextes: textes.length, themes, textes }), 'utf8')
+  console.log(`✓ ${textes.length} textes. → data.json`)
 }
 
 try { main() } catch (e) { console.warn('⚠️ build-votes ignoré :', e.message); process.exit(0) }

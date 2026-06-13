@@ -1,27 +1,16 @@
 {
   "maj": "2026-06-13",
   "legislature": 17,
-  "nbTextes": 3,
+  "nbTextes": 8,
   "_exemple": "Données d'exemple pour la prévisualisation locale. Remplacées par le script en production.",
-  "groupes": [
-    { "nom": "Rassemblement National", "participation": 84, "votes": 120 },
-    { "nom": "Ensemble pour la République", "participation": 91, "votes": 120 },
-    { "nom": "La France insoumise", "participation": 88, "votes": 120 },
-    { "nom": "Les Républicains", "participation": 79, "votes": 120 },
-    { "nom": "Socialistes et apparentés", "participation": 86, "votes": 120 },
-    { "nom": "Écologiste et social", "participation": 90, "votes": 118 },
-    { "nom": "Démocrates", "participation": 88, "votes": 120 },
-    { "nom": "Horizons & Indépendants", "participation": 82, "votes": 119 },
-    { "nom": "Droite Républicaine", "participation": 77, "votes": 117 },
-    { "nom": "LIOT", "participation": 80, "votes": 116 }
-  ],
-  "themes": ["Agriculture", "Budget & fiscalité", "Immigration & asile"],
+  "themes": ["Agriculture", "Budget & fiscalité", "Immigration & asile", "Environnement & énergie", "Santé", "Travail & retraites", "Sécurité & justice"],
   "textes": [
     {
-      "id": "7259",
-      "date": "2026-06-02",
-      "titre": "l'ensemble du projet de loi d'urgence pour la protection et la souveraineté agricoles (première lecture)",
-      "theme": "Agriculture",
+      "id": "7259", "date": "2026-06-02",
+      "titre": "Projet de loi d'urgence pour la protection et la souveraineté agricoles",
+      "titreOfficiel": "l'ensemble du projet de loi d'urgence pour la protection et la souveraineté agricoles (première lecture)",
+      "type": "Projet de loi", "lecture": "première lecture", "theme": "Agriculture",
+      "contexte": "Texte présenté comme une réponse à la crise agricole : il assouplit certaines règles (pesticides, seuils environnementaux) au nom de la compétitivité et de la souveraineté alimentaire. Très clivant entre soutien au monde agricole et inquiétudes environnementales.",
       "sort": "adopté",
       "global": { "pour": 312, "contre": 198, "abstention": 41 },
       "groupes": {
@@ -35,10 +24,11 @@
       "lienTexte": "https://www.assemblee-nationale.fr/dyn/17/scrutins/7259"
     },
     {
-      "id": "7188",
-      "date": "2026-05-20",
-      "titre": "l'ensemble du projet de loi de finances rectificative pour 2026",
-      "theme": "Budget & fiscalité",
+      "id": "7188", "date": "2026-05-20",
+      "titre": "Projet de loi de finances rectificative pour 2026",
+      "titreOfficiel": "l'ensemble du projet de loi de finances rectificative pour 2026",
+      "type": "Projet de loi", "lecture": "", "theme": "Budget & fiscalité",
+      "contexte": "Budget rectificatif en cours d'année : il ajuste les recettes et dépenses de l'État (économies, fiscalité). Rejeté, ce qui fragilise l'exécutif sur sa trajectoire budgétaire.",
       "sort": "rejeté",
       "global": { "pour": 241, "contre": 289, "abstention": 12 },
       "groupes": {
@@ -51,10 +41,11 @@
       "lienTexte": "https://www.assemblee-nationale.fr/dyn/17/scrutins/7188"
     },
     {
-      "id": "7041",
-      "date": "2026-04-15",
-      "titre": "l'ensemble de la proposition de loi relative à la maîtrise de l'immigration",
-      "theme": "Immigration & asile",
+      "id": "7041", "date": "2026-04-15",
+      "titre": "Proposition de loi relative à la maîtrise de l'immigration",
+      "titreOfficiel": "l'ensemble de la proposition de loi relative à la maîtrise de l'immigration",
+      "type": "Proposition de loi", "lecture": "", "theme": "Immigration & asile",
+      "contexte": "Durcit les conditions de séjour et d'accès aux prestations pour les étrangers. Sujet parmi les plus clivants de l'hémicycle, qui recompose souvent les alliances.",
       "sort": "adopté",
       "global": { "pour": 301, "contre": 244, "abstention": 9 },
       "groupes": {
@@ -65,6 +56,90 @@
         "Socialistes et apparentés": { "pour": 0, "contre": 60, "abstention": 2, "nonVotant": 4, "position": "contre" }
       },
       "lienTexte": "https://www.assemblee-nationale.fr/dyn/17/scrutins/7041"
+    },
+    {
+      "id": "6890", "date": "2026-02-11",
+      "titre": "Proposition de loi pour la sortie progressive des énergies fossiles",
+      "titreOfficiel": "l'ensemble de la proposition de loi pour la sortie progressive des énergies fossiles",
+      "type": "Proposition de loi", "lecture": "", "theme": "Environnement & énergie",
+      "contexte": "Fixe un calendrier de réduction des énergies fossiles et des soutiens à la rénovation. Oppose enjeux climatiques et craintes pour le pouvoir d'achat et l'industrie.",
+      "sort": "rejeté",
+      "global": { "pour": 198, "contre": 256, "abstention": 60 },
+      "groupes": {
+        "Rassemblement National": { "pour": 0, "contre": 84, "abstention": 3, "nonVotant": 5, "position": "contre" },
+        "Ensemble pour la République": { "pour": 30, "contre": 20, "abstention": 35, "nonVotant": 7, "position": "abstention" },
+        "La France insoumise": { "pour": 70, "contre": 0, "abstention": 1, "nonVotant": 3, "position": "pour" },
+        "Les Républicains": { "pour": 0, "contre": 46, "abstention": 2, "nonVotant": 4, "position": "contre" },
+        "Écologiste et social": { "pour": 36, "contre": 0, "abstention": 0, "nonVotant": 1, "position": "pour" }
+      },
+      "lienTexte": "https://www.assemblee-nationale.fr/dyn/17/scrutins/6890"
+    },
+    {
+      "id": "6655", "date": "2025-11-26",
+      "titre": "Projet de loi de financement de la sécurité sociale pour 2026",
+      "titreOfficiel": "l'ensemble du projet de loi de financement de la sécurité sociale pour 2026",
+      "type": "Projet de loi", "lecture": "", "theme": "Santé",
+      "contexte": "Le « budget de la Sécu » : recettes et dépenses pour l'assurance maladie, les retraites, la famille. Concentre chaque automne d'âpres débats sur les économies de santé.",
+      "sort": "adopté",
+      "global": { "pour": 270, "contre": 251, "abstention": 18 },
+      "groupes": {
+        "Rassemblement National": { "pour": 0, "contre": 85, "abstention": 2, "nonVotant": 5, "position": "contre" },
+        "Ensemble pour la République": { "pour": 84, "contre": 0, "abstention": 3, "nonVotant": 5, "position": "pour" },
+        "La France insoumise": { "pour": 0, "contre": 72, "abstention": 0, "nonVotant": 2, "position": "contre" },
+        "Les Républicains": { "pour": 43, "contre": 1, "abstention": 2, "nonVotant": 4, "position": "pour" }
+      },
+      "lienTexte": "https://www.assemblee-nationale.fr/dyn/17/scrutins/6655"
+    },
+    {
+      "id": "6420", "date": "2025-09-30",
+      "titre": "Proposition de loi visant à revaloriser les bas salaires",
+      "titreOfficiel": "l'ensemble de la proposition de loi visant à revaloriser les bas salaires",
+      "type": "Proposition de loi", "lecture": "", "theme": "Travail & retraites",
+      "contexte": "Propose un coup de pouce sur les salaires proches du SMIC. Débat classique entre soutien au pouvoir d'achat et coût pour les entreprises.",
+      "sort": "rejeté",
+      "global": { "pour": 232, "contre": 248, "abstention": 31 },
+      "groupes": {
+        "Rassemblement National": { "pour": 60, "contre": 10, "abstention": 15, "nonVotant": 5, "position": "pour" },
+        "Ensemble pour la République": { "pour": 2, "contre": 80, "abstention": 3, "nonVotant": 5, "position": "contre" },
+        "La France insoumise": { "pour": 71, "contre": 0, "abstention": 0, "nonVotant": 3, "position": "pour" },
+        "Les Républicains": { "pour": 0, "contre": 45, "abstention": 3, "nonVotant": 4, "position": "contre" },
+        "Socialistes et apparentés": { "pour": 58, "contre": 0, "abstention": 2, "nonVotant": 4, "position": "pour" }
+      },
+      "lienTexte": "https://www.assemblee-nationale.fr/dyn/17/scrutins/6420"
+    },
+    {
+      "id": "6101", "date": "2025-03-18",
+      "titre": "Proposition de loi renforçant la lutte contre le narcotrafic",
+      "titreOfficiel": "l'ensemble de la proposition de loi renforçant la lutte contre le narcotrafic",
+      "type": "Proposition de loi", "lecture": "", "theme": "Sécurité & justice",
+      "contexte": "Crée de nouveaux outils d'enquête et des peines aggravées contre le trafic de stupéfiants. Débat entre efficacité répressive et libertés publiques.",
+      "sort": "adopté",
+      "global": { "pour": 388, "contre": 102, "abstention": 40 },
+      "groupes": {
+        "Rassemblement National": { "pour": 86, "contre": 0, "abstention": 1, "nonVotant": 5, "position": "pour" },
+        "Ensemble pour la République": { "pour": 83, "contre": 1, "abstention": 3, "nonVotant": 5, "position": "pour" },
+        "La France insoumise": { "pour": 0, "contre": 65, "abstention": 6, "nonVotant": 3, "position": "contre" },
+        "Les Républicains": { "pour": 46, "contre": 0, "abstention": 1, "nonVotant": 4, "position": "pour" },
+        "Socialistes et apparentés": { "pour": 30, "contre": 10, "abstention": 18, "nonVotant": 4, "position": "pour" }
+      },
+      "lienTexte": "https://www.assemblee-nationale.fr/dyn/17/scrutins/6101"
+    },
+    {
+      "id": "5840", "date": "2024-10-22",
+      "titre": "Projet de loi de finances pour 2025",
+      "titreOfficiel": "l'ensemble du projet de loi de finances pour 2025 (première lecture)",
+      "type": "Projet de loi", "lecture": "première lecture", "theme": "Budget & fiscalité",
+      "contexte": "Le budget annuel de l'État. Texte le plus structurant de l'année : impôts, dépenses, déficit. Souvent au cœur des bras de fer et du recours au 49.3.",
+      "sort": "rejeté",
+      "global": { "pour": 192, "contre": 362, "abstention": 15 },
+      "groupes": {
+        "Rassemblement National": { "pour": 0, "contre": 88, "abstention": 0, "nonVotant": 5, "position": "contre" },
+        "Ensemble pour la République": { "pour": 84, "contre": 2, "abstention": 1, "nonVotant": 5, "position": "pour" },
+        "La France insoumise": { "pour": 0, "contre": 72, "abstention": 0, "nonVotant": 2, "position": "contre" },
+        "Les Républicains": { "pour": 38, "contre": 8, "abstention": 2, "nonVotant": 4, "position": "pour" },
+        "Socialistes et apparentés": { "pour": 0, "contre": 62, "abstention": 1, "nonVotant": 3, "position": "contre" }
+      },
+      "lienTexte": "https://www.assemblee-nationale.fr/dyn/17/scrutins/5840"
     }
   ]
 }
