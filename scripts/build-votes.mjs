@@ -115,17 +115,19 @@ function votantsParBucket(scrutin) {
   return out
 }
 
-function main() {
+async function main() {
   // 1) Roster Datan : acteurRef -> nom de groupe
   let groupeDe = {}
   try {
     console.log('→ Datan (groupes des députés)…')
-    const txt = execSync(`curl -fsSL "${DATAN_CSV}"`, { encoding: 'utf8', maxBuffer: 1 << 28 })
-    for (const r of parseCSV(txt)) {
+    const res = await fetch(DATAN_CSV, { headers: { 'User-Agent': 'registre-votes (open data)' } })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    for (const r of parseCSV(await res.text())) {
       if (r.id) groupeDe[String(r.id)] = { nom: r.groupe || r.groupeAbrev || 'Non inscrit', abrev: r.groupeAbrev || '' }
     }
+    console.log(`  ${Object.keys(groupeDe).length} députés chargés`)
   } catch (e) { console.warn('⚠️ Datan indisponible :', e.message); return }
-  if (!Object.keys(groupeDe).length) { console.warn('⚠️ roster vide'); return }
+  if (!Object.keys(groupeDe).length) { console.warn('⚠️ roster Datan vide, on n\'écrase pas'); return }
 
   // 2) Scrutins AN
   let dir
@@ -133,12 +135,14 @@ function main() {
     const tmp = mkdtempSync(join(tmpdir(), 'scr-'))
     const zip = join(tmp, 's.zip')
     console.log('→ Scrutins (Assemblée nationale)…')
-    execSync(`curl -fsSL "${SCRUTINS_ZIP}" -o "${zip}"`, { stdio: 'ignore' })
+    execSync(`curl -fsSL -A "registre-votes (open data)" "${SCRUTINS_ZIP}" -o "${zip}"`, { stdio: 'ignore' })
     execSync(`unzip -oq "${zip}" -d "${tmp}"`, { stdio: 'ignore' })
     dir = tmp
   } catch (e) { console.warn('⚠️ Scrutins indisponibles :', e.message); return }
 
   const fichiers = walkJSON(dir).filter(f => /scrutin/i.test(f))
+  console.log(`  ${fichiers.length} fichiers de scrutins`)
+  let vusEnsemble = 0, sansGroupe = 0
   const textes = []
 
   for (const f of fichiers) {
@@ -147,6 +151,7 @@ function main() {
     if (!s) continue
     const objet = (s.objet?.libelle || s.titre || '').trim()
     if (!/l['’]ensemble/i.test(objet)) continue   // votes finaux sur un texte
+    vusEnsemble++
 
     const date = (s.dateScrutin || '').slice(0, 10)
     const numero = s.numero || ''
@@ -162,7 +167,7 @@ function main() {
       ;(parGroupe[k] ||= { pour: 0, contre: 0, abstention: 0, nonVotant: 0 })[bucket]++
       if (bucket !== 'nonVotant') global[bucket]++
     }
-    if (!Object.keys(parGroupe).length) continue
+    if (!Object.keys(parGroupe).length) { sansGroupe++; continue }
 
     // position majoritaire du groupe
     const groupes = {}
@@ -186,6 +191,7 @@ function main() {
     })
   }
 
+  console.log(`  ${vusEnsemble} votes « sur l'ensemble », ${sansGroupe} sans correspondance de groupe`)
   if (!textes.length) { console.warn('⚠️ aucun texte retenu, on n\'écrase pas'); return }
   textes.sort((a, b) => (b.date || '').localeCompare(a.date || ''))
 
@@ -195,4 +201,4 @@ function main() {
   console.log(`✓ ${textes.length} textes. → data.json`)
 }
 
-try { main() } catch (e) { console.warn('⚠️ build-votes ignoré :', e.message); process.exit(0) }
+try { await main() } catch (e) { console.warn('⚠️ build-votes ignoré :', e.message); process.exit(0) }
