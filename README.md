@@ -33,10 +33,6 @@ lecture, thématique). Pour un vrai laïus explicatif, renseigner `contextes.jso
 (clé = numéro de scrutin, valeur = phrase **neutre et sourcée**) : cette surcouche
 est prioritaire et **n'est jamais écrasée** par la mise à jour automatique.
 
-> Pourquoi manuel ? Un résumé du « contexte » d'une loi est éditorial : l'écrire
-> automatiquement risquerait d'introduire des erreurs ou un biais. On préfère un
-> contexte factuel par défaut, enrichi à la main quand c'est vérifié.
-
 ## Mise à jour automatique
 
 `.github/workflows/update-data.yml` tourne **chaque lundi** (et à la demande) : il
@@ -44,10 +40,6 @@ régénère `data.json` puis redéploie. Rien à faire à la main.
 
 - **Fail-safe** : si une source est indisponible, le script sort sans écraser
   `data.json` — le site garde les dernières données valides.
-
-> ⚠️ Tant que ce workflow n'a pas tourné au moins une fois, le site affiche les
-> **données d'exemple** livrées dans `data.json`. Lance « Mettre à jour les votes »
-> pour basculer sur les vrais scrutins.
 
 ## Limites assumées
 
@@ -60,8 +52,3 @@ régénère `data.json` puis redéploie. Rien à faire à la main.
 
 Open data de l'Assemblée nationale (scrutins publics) et Datan, sous **Licence
 Ouverte / Etalab**. Citer : « d'après l'Assemblée nationale ».
-
-## Déploiement
-
-Dépôt public → Settings → Pages → Source : **GitHub Actions**. Les workflows
-incluent `enablement: true` pour activer Pages automatiquement au premier run.
