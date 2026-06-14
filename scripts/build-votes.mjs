@@ -77,12 +77,15 @@ function contexteDe(numero, type, lecture, theme) {
 
 // ---- CSV (Datan, séparateur point-virgule, guillemets) ----
 function parseCSV(text) {
+  const firstNL = text.indexOf('\n')
+  const head = text.slice(0, firstNL < 0 ? text.length : firstNL)
+  const delim = head.split(';').length > head.split(',').length ? ';' : ','
   const rows = []; let f = '', row = [], q = false
   for (let i = 0; i < text.length; i++) {
     const c = text[i]
     if (q) { if (c === '"') { if (text[i + 1] === '"') { f += '"'; i++ } else q = false } else f += c }
     else if (c === '"') q = true
-    else if (c === ';') { row.push(f); f = '' }
+    else if (c === delim) { row.push(f); f = '' }
     else if (c === '\n') { row.push(f); rows.push(row); row = []; f = '' }
     else if (c !== '\r') f += c
   }
