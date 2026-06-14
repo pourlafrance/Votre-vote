@@ -126,8 +126,8 @@ async function main() {
       if (r.id) groupeDe[String(r.id)] = { nom: r.groupe || r.groupeAbrev || 'Non inscrit', abrev: r.groupeAbrev || '' }
     }
     console.log(`  ${Object.keys(groupeDe).length} députés chargés`)
-  } catch (e) { console.warn('⚠️ Datan indisponible :', e.message); return }
-  if (!Object.keys(groupeDe).length) { console.warn('⚠️ roster Datan vide, on n\'écrase pas'); return }
+  } catch (e) { throw new Error('Datan indisponible : ' + e.message) }
+  if (!Object.keys(groupeDe).length) throw new Error('roster Datan vide')
 
   // 2) Scrutins AN
   let dir
@@ -138,7 +138,7 @@ async function main() {
     execSync(`curl -fsSL -A "registre-votes (open data)" "${SCRUTINS_ZIP}" -o "${zip}"`, { stdio: 'ignore' })
     execSync(`unzip -oq "${zip}" -d "${tmp}"`, { stdio: 'ignore' })
     dir = tmp
-  } catch (e) { console.warn('⚠️ Scrutins indisponibles :', e.message); return }
+  } catch (e) { throw new Error('Scrutins indisponibles : ' + e.message) }
 
   const fichiers = walkJSON(dir).filter(f => /scrutin/i.test(f))
   console.log(`  ${fichiers.length} fichiers de scrutins`)
@@ -192,7 +192,7 @@ async function main() {
   }
 
   console.log(`  ${vusEnsemble} votes « sur l'ensemble », ${sansGroupe} sans correspondance de groupe`)
-  if (!textes.length) { console.warn('⚠️ aucun texte retenu, on n\'écrase pas'); return }
+  if (!textes.length) throw new Error('aucun texte « sur l\'ensemble » retenu (sur ' + vusEnsemble + ' candidats)')
   textes.sort((a, b) => (b.date || '').localeCompare(a.date || ''))
 
   const themes = [...new Set(textes.map(t => t.theme))]
@@ -201,4 +201,4 @@ async function main() {
   console.log(`✓ ${textes.length} textes. → data.json`)
 }
 
-try { await main() } catch (e) { console.warn('⚠️ build-votes ignoré :', e.message); process.exit(0) }
+try { await main() } catch (e) { console.error('✗ build-votes a ÉCHOUÉ :', e.message); process.exit(1) }
