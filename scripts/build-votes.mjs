@@ -140,13 +140,13 @@ async function main() {
     const tmp = mkdtempSync(join(tmpdir(), 'scr-'))
     const zip = join(tmp, 's.zip')
     console.log('→ Scrutins (Assemblée nationale)…')
-    execSync(`curl -fsSL -A "registre-votes (open data)" "${SCRUTINS_ZIP}" -o "${zip}"`, { stdio: 'ignore' })
+    execSync(`curl -fsSL "${SCRUTINS_ZIP}" -o "${zip}"`, { stdio: 'ignore' })
     execSync(`unzip -oq "${zip}" -d "${tmp}"`, { stdio: 'ignore' })
     dir = tmp
   } catch (e) { throw new Error('Scrutins indisponibles : ' + e.message) }
 
-  const fichiers = walkJSON(dir).filter(f => /scrutin/i.test(f))
-  ghNotice(`${fichiers.length} fichiers de scrutins`)
+  const fichiers = walkJSON(dir)
+  ghNotice(`${fichiers.length} fichiers JSON extraits`)
   let vusEnsemble = 0, sansGroupe = 0
   const textes = []
 
