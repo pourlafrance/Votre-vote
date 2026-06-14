@@ -28,6 +28,8 @@ const SCRUTINS_ZIP = 'https://data.assemblee-nationale.fr/static/openData/reposi
 const AUJOURDHUI = new Date().toISOString().slice(0, 10)
 
 const arr = v => (v == null ? [] : Array.isArray(v) ? v : [v])
+const ghNotice = m => console.log(`::notice::${m}`)
+const ghError = m => console.log(`::error::${m}`)
 
 // ---- Thématiques (classification automatique par mots-clés, 1er match) ----
 const THEMES = [
@@ -125,7 +127,7 @@ async function main() {
     for (const r of parseCSV(await res.text())) {
       if (r.id) groupeDe[String(r.id)] = { nom: r.groupe || r.groupeAbrev || 'Non inscrit', abrev: r.groupeAbrev || '' }
     }
-    console.log(`  ${Object.keys(groupeDe).length} députés chargés`)
+    ghNotice(`Datan : ${Object.keys(groupeDe).length} députés chargés`)
   } catch (e) { throw new Error('Datan indisponible : ' + e.message) }
   if (!Object.keys(groupeDe).length) throw new Error('roster Datan vide')
 
@@ -141,7 +143,7 @@ async function main() {
   } catch (e) { throw new Error('Scrutins indisponibles : ' + e.message) }
 
   const fichiers = walkJSON(dir).filter(f => /scrutin/i.test(f))
-  console.log(`  ${fichiers.length} fichiers de scrutins`)
+  ghNotice(`${fichiers.length} fichiers de scrutins`)
   let vusEnsemble = 0, sansGroupe = 0
   const textes = []
 
@@ -191,14 +193,14 @@ async function main() {
     })
   }
 
-  console.log(`  ${vusEnsemble} votes « sur l'ensemble », ${sansGroupe} sans correspondance de groupe`)
+  ghNotice(`${vusEnsemble} votes « sur l'ensemble », ${sansGroupe} sans correspondance de groupe, ${textes.length} retenus`)
   if (!textes.length) throw new Error('aucun texte « sur l\'ensemble » retenu (sur ' + vusEnsemble + ' candidats)')
   textes.sort((a, b) => (b.date || '').localeCompare(a.date || ''))
 
   const themes = [...new Set(textes.map(t => t.theme))]
 
   writeFileSync(OUT, JSON.stringify({ maj: AUJOURDHUI, legislature: 17, nbTextes: textes.length, themes, textes }), 'utf8')
-  console.log(`✓ ${textes.length} textes. → data.json`)
+  ghNotice(`✓ ${textes.length} textes écrits dans data.json`)
 }
 
-try { await main() } catch (e) { console.error('✗ build-votes a ÉCHOUÉ :', e.message); process.exit(1) }
+try { await main() } catch (e) { ghError('build-votes a ÉCHOUÉ : ' + e.message); process.exit(1) }
