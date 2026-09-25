@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Les scrutins · Qu'auriez-vous voté ?</title>
+  <meta name="description" content="Pour chaque texte voté à l'Assemblée nationale, donnez votre avis, puis découvrez ce qu'ont voté les groupes politiques. Aucune donnée n'est collectée." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Crect width='1' height='2' fill='%23000091'/%3E%3Crect x='1' width='1' height='2' fill='%23fff'/%3E%3Crect x='2' width='1' height='2' fill='%23E1000F'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Spectral:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="charte.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="plf">
+  <a class="skip" href="#quiz">Aller aux questions</a>
+
+  <div class="plf-wrap">
+  <header class="plf-marque">
+    <span class="plf-drapeau" aria-hidden="true"><span></span><span></span><span></span></span>
+    <a class="plf-marque-nom" href="index.html"><span class="plf-mot-bleu">Pour</span> <span class="plf-mot-blanc">la</span> <span class="plf-mot-rouge">France</span></a>
+    <span class="plf-marque-devise">Indépendant · anonyme · open source</span>
+  </header>
+    <div class="plf-filet-tricolore" aria-hidden="true"><span></span><span></span><span></span></div>
+  <nav class="plf-nav">
+    <a href="index.html" onclick="if(history.length>1){history.back();return false}">← Retour</a>
+    <a href="index.html">Accueil</a>
+  </nav>
+  </div>
+
+  <header class="site">
+    <div class="wrap">
+      <h1>Qu'auriez-vous voté&nbsp;?</h1>
+      <p class="lede">
+        Pour chaque texte voté à l'Assemblée nationale, donnez votre avis :
+        <strong>Pour</strong>, <strong>Contre</strong> ou <strong>Abstention</strong>,
+        puis découvrez ce qu'ont voté les groupes politiques.
+      </p>
+      <p class="principe">
+        <strong>Aucune donnée n'est collectée.</strong> Vos réponses restent sur votre appareil et ne sont envoyées nulle part.
+        L'objectif est seulement de confronter vos idées aux choix des partis, sur des faits publics et sourcés.
+      </p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="filtres" aria-label="Filtres">
+      <label class="filtre">
+        <span class="flabel">Thème</span>
+        <select id="themes"></select>
+      </label>
+      <label class="filtre">
+        <span class="flabel">Année</span>
+        <select id="annees"></select>
+      </label>
+    </section>
+
+    <section id="quiz" aria-live="polite">
+      <p id="progress" class="progress"></p>
+      <div class="quiz-row">
+        <button id="prev" class="nav-btn" type="button" aria-label="Texte précédent">‹</button>
+        <div id="question"></div>
+        <button id="next" class="nav-btn" type="button" aria-label="Texte suivant">›</button>
+      </div>
+    </section>
+    <p class="maj">Sources : <a href="https://data.assemblee-nationale.fr/" target="_blank" rel="noopener">open data de l'Assemblée nationale</a> (scrutins publics) et <a href="https://www.data.gouv.fr/fr/datasets/deputes-actifs-de-lassemblee-nationale-informations-et-statistiques/" target="_blank" rel="noopener">Datan</a> (groupes). Licence Ouverte / Etalab.<br>Mise à jour automatique · <span id="maj"></span> · Législature en cours. Classement par thématique : automatique (mots-clés).</p>
+  </main>
+
+  <div class="plf-wrap">
+    <footer class="plf-pied">
+      <div class="plf-filet-tricolore plf-filet-tricolore--court" aria-hidden="true"><span></span><span></span><span></span></div>
+      <p>Pour la France · projet citoyen indépendant · Liberté, Égalité, Fraternité</p>
+      <p>
+        <a href="index.html">Accueil</a> ·
+        <a href="https://pourlafrance.github.io/Test-de-personnalite-politique/faq.html">FAQ</a> ·
+        <a href="https://x.com/fracoiselibre" target="_blank" rel="noopener">Compte X</a> ·
+        <a href="https://github.com/pourlafrance/Votre-vote" target="_blank" rel="noopener">Code source (GitHub)</a>
+      </p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

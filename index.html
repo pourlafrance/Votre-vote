@@ -3,65 +3,85 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Qu'auriez-vous voté ? — Votes à l'Assemblée nationale</title>
+  <title>Qu'auriez-vous voté ? · Votes à l'Assemblée nationale</title>
   <meta name="description" content="Pour chaque texte voté à l'Assemblée nationale, donnez votre avis, puis découvrez ce qu'ont voté les groupes politiques. Aucune donnée n'est collectée." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Crect width='1' height='2' fill='%23000091'/%3E%3Crect x='1' width='1' height='2' fill='%23fff'/%3E%3Crect x='2' width='1' height='2' fill='%23E1000F'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Spectral:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="charte.css" />
 </head>
-<body>
-  <a class="skip" href="#quiz">Aller aux questions</a>
+<body class="plf">
 
-  <header class="site">
-    <div class="wrap center">
-      <span class="flag" role="img" aria-label="Drapeau français"></span>
-      <h1>Qu'auriez-vous voté&nbsp;?</h1>
-      <p class="lede">
-        Pour chaque texte voté à l'Assemblée nationale, donnez votre avis —
-        <strong>Pour</strong>, <strong>Contre</strong> ou <strong>Abstention</strong> —
-        puis découvrez ce qu'ont voté les groupes politiques.
-      </p>
-      <p class="principe">
-        <strong>Aucune donnée n'est collectée.</strong> Vos réponses restent sur votre appareil et ne sont envoyées nulle part.
-        L'objectif est seulement de confronter vos idées aux choix des partis, sur des faits publics et sourcés.
-      </p>
-    </div>
+<div class="plf-wrap">
+  <header class="plf-marque">
+    <span class="plf-drapeau" aria-hidden="true"><span></span><span></span><span></span></span>
+    <span class="plf-marque-nom"><span class="plf-mot-bleu">Pour</span> <span class="plf-mot-blanc">la</span> <span class="plf-mot-rouge">France</span></span>
+    <span class="plf-marque-devise">Indépendant · anonyme · open source</span>
   </header>
+  <div class="plf-filet-tricolore" aria-hidden="true"><span></span><span></span><span></span></div>
+  <nav class="plf-nav">
+    <a href="index.html" onclick="if(history.length>1){history.back();return false}">← Retour</a>
+    <a href="index.html">Accueil</a>
+  </nav>
 
-  <main class="wrap">
-    <section class="filtres" aria-label="Filtres">
-      <div class="filtre-row">
-        <span class="flabel">Thème</span>
-        <div id="themes" class="chips"></div>
-      </div>
-      <div class="filtre-row">
-        <span class="flabel">Année</span>
-        <div id="annees" class="chips"></div>
+  <main>
+    <section class="plf-garde-hero">
+      <span class="plf-kicker">Assemblée nationale · législature en cours</span>
+      <h1>Qu'auriez-vous voté&nbsp;?</h1>
+      <p>Pour chaque texte voté à l'Assemblée nationale, donnez votre avis puis découvrez ce qu'ont voté les groupes politiques.</p>
+      <div class="plf-garde-actions">
+        <a class="plf-btn" href="scrutins.html">Voter sur un texte</a>
+        <a class="plf-btn-2" href="#methode">Méthode et sources</a>
       </div>
     </section>
 
-    <section id="quiz" aria-live="polite">
-      <p id="progress" class="progress"></p>
-      <div class="quiz-row">
-        <button id="prev" class="nav-btn" type="button" aria-label="Texte précédent">‹</button>
-        <div id="question"></div>
-        <button id="next" class="nav-btn" type="button" aria-label="Texte suivant">›</button>
+    <section class="plf-garde-outils" aria-label="Les trois outils">
+      <span class="plf-kicker">Les trois outils</span>
+      <div class="plf-cartes">
+
+        <article class="plf-carte">
+          <div class="plf-carte-tete"><span class="plf-carre"></span></div>
+          <h3>Test de personnalité politique</h3>
+          <p>Comparez vos opinions aux programmes des candidats à l'élection présidentielle. Indépendant, anonyme, open source.</p>
+          <a class="plf-carte-btn" href="https://pourlafrance.github.io/Test-de-personnalite-politique/">Commencer le test</a>
+        </article>
+
+        <article class="plf-carte plf-carte--ici">
+          <div class="plf-carte-tete">
+            <span class="plf-carre"></span>
+            <span class="plf-ici-label">Vous êtes ici</span>
+          </div>
+          <h3>Qu'auriez-vous voté&nbsp;?</h3>
+          <p>Pour chaque texte voté à l'Assemblée nationale, donnez votre avis puis découvrez ce qu'ont voté les groupes politiques.</p>
+          <a class="plf-carte-btn" href="scrutins.html">Ouvrir les scrutins</a>
+        </article>
+
+        <article class="plf-carte">
+          <div class="plf-carte-tete"><span class="plf-carre"></span></div>
+          <h3>Subventions FR</h3>
+          <p>Où va l'argent public&nbsp;? Les subventions publiques françaises à partir des données officielles, sourcées et sans commentaire.</p>
+          <a class="plf-carte-btn" href="https://pourlafrance.github.io/subvention-FR/">Explorer les données</a>
+        </article>
+
       </div>
+
+      <div class="plf-filet-tricolore plf-filet-tricolore--court" aria-hidden="true"><span></span><span></span><span></span></div>
+      <p class="plf-garde-methode" id="methode">Aucune donnée collectée. Vos réponses restent sur votre appareil. Données publiques&nbsp;: open data de l'Assemblée nationale, programmes officiels des candidats, annuaire des subventions de l'État.</p>
     </section>
   </main>
 
-  <footer class="site-foot">
-    <div class="wrap">
+  <footer class="plf-pied">
+    <div class="plf-filet-tricolore plf-filet-tricolore--court" aria-hidden="true"><span></span><span></span><span></span></div>
+    <p>Pour la France · projet citoyen indépendant · Liberté, Égalité, Fraternité</p>
       <p>
-        Sources : <a href="https://data.assemblee-nationale.fr/" target="_blank" rel="noopener">open data de l'Assemblée nationale</a> (scrutins publics)
-        et <a href="https://www.data.gouv.fr/fr/datasets/deputes-actifs-de-lassemblee-nationale-informations-et-statistiques/" target="_blank" rel="noopener">Datan</a> (groupes).
-        Licence Ouverte / Etalab.
+        <a href="index.html">Accueil</a> ·
+        <a href="https://pourlafrance.github.io/Test-de-personnalite-politique/faq.html">FAQ</a> ·
+        <a href="https://x.com/fracoiselibre" target="_blank" rel="noopener">Compte X</a> ·
+        <a href="https://github.com/pourlafrance/Votre-vote" target="_blank" rel="noopener">Code source (GitHub)</a>
       </p>
-      <p class="maj">Mise à jour automatique · <span id="maj"></span> · Législature en cours. Classement par thématique : automatique (mots-clés).</p>
-    </div>
   </footer>
+</div>
 
-  <script src="app.js"></script>
 </body>
 </html>

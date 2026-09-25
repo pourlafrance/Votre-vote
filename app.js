@@ -43,21 +43,19 @@ function rebuild() {
 }
 
 function renderFiltres() {
-  const tbox = $('#themes'); tbox.innerHTML = '';
+  const tsel = $('#themes'); tsel.innerHTML = '';
   ['Tous', ...(DATA.themes || [])].forEach(t => {
-    const b = el('button', 'chip', esc(t)); b.type = 'button';
-    b.setAttribute('aria-pressed', String(t === theme));
-    b.onclick = () => { theme = t; rebuild(); };
-    tbox.append(b);
+    const o = el('option', null, esc(t)); o.value = t; o.selected = (t === theme);
+    tsel.append(o);
   });
-  const abox = $('#annees'); abox.innerHTML = '';
+  tsel.onchange = () => { theme = tsel.value; rebuild(); };
+  const asel = $('#annees'); asel.innerHTML = '';
   const annees = [...new Set((DATA.textes || []).map(anneeDe).filter(Boolean))].sort().reverse();
   ['Toutes', ...annees].forEach(a => {
-    const b = el('button', 'chip', esc(a)); b.type = 'button';
-    b.setAttribute('aria-pressed', String(a === annee));
-    b.onclick = () => { annee = a; rebuild(); };
-    abox.append(b);
+    const o = el('option', null, esc(a)); o.value = a; o.selected = (a === annee);
+    asel.append(o);
   });
+  asel.onchange = () => { annee = asel.value; rebuild(); };
 }
 
 function render() {
