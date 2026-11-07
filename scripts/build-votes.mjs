@@ -33,25 +33,25 @@ const ghError = m => console.log(`::error::${m}`)
 
 // ---- Thématiques (classification automatique par mots-clés, 1er match) ----
 const THEMES = [
-  ['Budget & fiscalité', /budget|finances?|fiscal|imp[oô]t|taxe|s[ée]curit[ée] sociale|\bplf\b|plfss/i],
-  ['Travail & retraites', /travail|emploi|retraite|ch[oô]mage|salari|pouvoir d.achat|smic/i],
-  ['Santé', /sant[ée]|h[oô]pital|m[ée]dic|soin|s[ée]curit[ée] sociale/i],
-  ['Immigration & asile', /immigration|asile|[ée]tranger|s[ée]jour|naturalisation/i],
-  ['Sécurité & justice', /s[ée]curit[ée]|justice|p[ée]nal|d[ée]linqu|police|terroris|prison|narcotrafic/i],
-  ['Environnement & énergie', /environnement|climat|[ée]nergie|nucl[ée]aire|[ée]cologi|renouvelable|pollution|eau\b/i],
-  ['Agriculture', /agricol|agricultur|p[eê]che|alimentation|[ée]levage|paysan/i],
-  ['Éducation & recherche', /[ée]ducation|[ée]cole|universit|enseignement|recherche|[ée]tudiant/i],
-  ['Logement', /logement|habitat|loyer|urbanisme|locati/i],
-  ['Économie & entreprises', /[ée]conomi|entreprise|industri|commerce|consommation|num[ée]rique|simplification/i],
-  ['Institutions & élections', /constitution|[ée]lection|r[ée]f[ée]rendum|institution|d[ée]centralisation|collectivit|scrutin/i],
-  ['International & défense', /d[ée]fense|arm[ée]e|militaire|international|trait[ée]|ukraine|union europ[ée]enne|\botan\b|gaza/i],
-  ['Société & libertés', /bio[ée]thique|fin de vie|la[ïi]cit|famille|[ée]galit|discrimination|libert/i]
+  ['Budget & fiscalité', /budget|finances?|fiscal|imp[oô]t|taxe|s[ée]curit[ée] sociale|\bplf\b|plfss|fin de gestion|frais bancaires|recouvrement des cr[ée]ances|op[ée]rateurs de l.[ée]tat|patrimoine immobilier de l.[ée]tat|compensation financi[eè]re/i],
+  ['Travail & retraites', /travail|emploi|retraite|retrait[ée]s|ch[oô]mage|salari|pouvoir d.achat|smic|titres?.restaurant|contrat de professionnalisation|agents publics|fonctionnaires/i],
+  ['Agriculture', /agricol|agricultur|agriculteur|p[eê]che|alimentation|[ée]levage|paysan|vignes|apicole|denr[ée]es alimentaires|cultures v[ée]g[ée]tales/i],
+  ['Santé', /sant[ée]|h[oô]pital|m[ée]dic|m[ée]decin|soin|s[ée]curit[ée] sociale|maladie|cancer|infirmier|orthophonist|mortalit[ée] infantile|vapotage|fauteuils roulants|assurance maladie|sclérose|soignants/i],
+  ['Immigration & asile', /immigration|asile|[ée]tranger|s[ée]jour|naturalisation|nationalit[ée]|r[ée]tention/i],
+  ['Éducation & recherche', /[ée]ducation|[ée]cole|scolaire|[ée]l[eè]ves|universit|enseignement|recherche|[ée]tudiant/i],
+  ['Sécurité & justice', /s[ée]curit[ée]|justice|p[ée]nal|d[ée]linqu|police|terroris|prison|narcotrafic|juridictions?|criminalit[ée]|criminel|procureur|plainte|violences|p[ée]docriminalit|homicide|fraudes?|avoirs saisis|s[ûu]ret[ée]|sapeurs-pompiers|nullit[ée]s|avocat/i],
+  ['Environnement & énergie', /environnement|climat|[ée]nergie|nucl[ée]aire|[ée]cologi|renouvelable|pollution|eau\b|hydro[ée]lectric|plastique|chlord[ée]cone|perfluoro|frelon|montagne|v[ée]lique/i],
+  ['Logement', /logement|habitat|loyer|urbanisme|locati|meubl[ée]s de tourisme|sans-abrisme|ascenseur|ascenceur|indivision|indivison|successions?/i],
+  ['Économie & entreprises', /[ée]conomi|entreprise|industri|commerce|consommat|num[ée]rique|simplification|r[ée]seaux sociaux|tiktok|droits voisins|d[ée]bits de boissons|d[ée]marchage|baux commerciaux|vie ch[eè]re|moyens de paiement|transport maritime/i],
+  ['Institutions & élections', /constitution|[ée]lection|r[ée]f[ée]rendum|institution|d[ée]centralisation|collectivit|scrutin|[ée]lus? locaux|[ée]lu local|mandat|candidats|affaires courantes|mayotte|nouvelle-cal[ée]donie|polyn[ée]sie|outre-mer|organique|gouvernance territoriale|vote par correspondance/i],
+  ['International & défense', /d[ée]fense|arm[ée]e|militaire|international|\btrait[ée]s?\b|ukraine|union europ[ée]enne|\botan\b|gaza|brexit|biens culturels|jeux olympiques/i],
+  ['Société & libertés', /bio[ée]thique|fin de vie|aide [àa] mourir|la[ïi]cit|famille|[ée]galit|discrimination|libert|enfants?|mineurs|parents|devoir conjugal|homosexualit|code noir|r[ée]union en france|crèches|creches|croix de la valeur/i]
 ]
 const themeDe = (txt) => (THEMES.find(([, re]) => re.test(txt)) || ['Autre'])[0]
 
 // Nettoie l'intitulé officiel en titre lisible.
 function titrePropre(objet) {
-  let s = objet.replace(/^l['’]ensemble\s+(du |de la |des |de l['’]|d['’])?/i, '').trim()
+  let s = objet.replace(/^l['’]ensemble\s+(de\s+)?(du |de la |des |de l['’]|d['’])?/i, '').trim()
   s = s.replace(/\s*\((première|deuxième|nouvelle|nouvelle lecture|lecture définitive)[^)]*\)\s*$/i, '').trim()
   return s ? s.charAt(0).toUpperCase() + s.slice(1) : objet
 }
@@ -155,7 +155,7 @@ async function main() {
     try { s = JSON.parse(readFileSync(f, 'utf8')).scrutin } catch { continue }
     if (!s) continue
     const objet = (s.objet?.libelle || s.titre || '').trim()
-    if (!/l['’]ensemble/i.test(objet)) continue   // votes finaux sur un texte
+    if (!/^l['’]ensemble\b/i.test(objet)) continue   // votes finaux sur un texte (pas les amendements ni les articles)
     vusEnsemble++
 
     const date = (s.dateScrutin || '').slice(0, 10)
