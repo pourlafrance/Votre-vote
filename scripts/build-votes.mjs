@@ -161,7 +161,8 @@ async function main() {
     const date = (s.dateScrutin || '').slice(0, 10)
     const numero = s.numero || ''
     const sort = (s.sort?.libelle || s.sort?.code || '').toLowerCase()
-    const adopte = /adopt/.test(sort)
+    const code = (s.sort?.code || '').toLowerCase()
+    const adopte = code ? /^adopt/.test(code) : (/adopt/.test(sort) && !/n['’]a pas adopt/.test(sort))
 
     const parGroupe = {}      // nom -> {pour,contre,abstention,nonVotant}
     const global = { pour: 0, contre: 0, abstention: 0 }
@@ -173,6 +174,13 @@ async function main() {
       if (bucket !== 'nonVotant') global[bucket]++
     }
     if (!Object.keys(parGroupe).length) { sansGroupe++; continue }
+    // Total officiel de l'Assemblée (inclut les députés remplacés depuis, absents du roster Datan)
+    const dc = s.syntheseVote?.decompte
+    if (dc && dc.pour != null) {
+      global.pour = Number(dc.pour) || 0
+      global.contre = Number(dc.contre) || 0
+      global.abstention = Number(dc.abstentions) || 0
+    }
 
     // position majoritaire du groupe
     const groupes = {}
